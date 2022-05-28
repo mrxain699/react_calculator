@@ -1,23 +1,45 @@
-import logo from './logo.svg';
+/* eslint no-eval: 0 */
+import { useState } from 'react';
 import './App.css';
-
+import Button from './Button';
+import ButtonContent from './ButtonContent';
 function App() {
+  const [input, setInput] = useState('');
+
+  const handleInput = (e) => {
+    if(e.target.value === "="){
+      try{
+        setInput(eval(input).toString());
+      }
+      catch(error){}
+    }
+    else if(e.target.value === "c"){
+      setInput('');
+    }
+    else{
+      setInput((prevState)=>{
+        return prevState + e.target.value;
+      });
+    }
+  } 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="wrapper">
+      <header>
+        <h1>React Calculator</h1>
       </header>
+      <div className="cal_box">
+        <div className="input_screen">
+          <span>{input !== '' ? input : 0}</span>
+        </div>
+        <div className="buttons">
+          {
+            ButtonContent.map((row, index)=>{
+              return <Button  key={index} row={row} index={index} handleInput={handleInput}/>
+            })
+          }
+          
+        </div>
+      </div>
     </div>
   );
 }
